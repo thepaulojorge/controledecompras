@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Compras - Japão 2028</title>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0078d7">
+
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="theme-default">
+  <!-- Cabeçalho -->
+  <header>
+    <h1>Controle de Compras - Japão 2028</h1>
+    <div id="themeSelector">
+      <button data-theme="default">Tema Padrão</button>
+      <button data-theme="dark">Dark Mode</button>
+      <button data-theme="viagem">Tema Viagem</button>
+      <button data-theme="minimalista">Tema Minimalista</button>
+    </div>
+  </header>
+
+  <!-- Formulário -->
+  <form id="formCompra" class="form-box">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Item:</label>
+        <input type="text" id="item" required>
+      </div>
+      <div class="form-group">
+        <label>Valor em JPY:</label>
+        <input type="number" id="valorJPY" step="0.01" required>
+      </div>
+      <div class="form-group button-group">
+        <button type="submit">Adicionar Compra</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Campo de busca -->
+  <label for="busca">Buscar item:</label>
+  <input type="text" id="busca" placeholder="Digite para filtrar...">
+
+  <!-- Tabela -->
+  <table id="tabelaCompras">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>JPY</th>
+        <th>USD</th>
+        <th>BRL</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Barra de progresso + total -->
+  <div id="progressContainer">
+    <div id="progressBar"></div>
+  </div>
+  <div id="total">Total em USD: $0.00 / Limite: $1000</div>
+
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("Service Worker registrado!"))
+      .catch((err) => console.error("Erro no Service Worker:", err));
+  }
+</script>
+
+  <!-- Script -->
+  <script src="./javascript/script.js"></script>
+</body>
+</html>

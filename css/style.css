@@ -1,0 +1,351 @@
+/* ===== Tema Padrão ===== */
+body.theme-default {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  margin: 20px;
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+h1 {
+  color: #222;
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 10px;
+  transition: color 0.6s ease;
+}
+
+/* Cabeçalho */
+header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#themeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Caixa do formulário */
+.form-box {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  transition: background-color 0.6s ease, border-color 0.6s ease;
+}
+
+.form-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.form-group input {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.6s ease, color 0.6s ease;
+}
+
+.form-group input:focus {
+  border-color: #0078d7;
+  box-shadow: 0 0 5px rgba(0,120,215,0.5);
+  outline: none;
+}
+
+/* Botão ao lado dos campos */
+.button-group {
+  flex: 0;
+}
+
+.button-group button {
+  height: 38px;
+  margin-top: auto;
+  border-radius: 4px;
+}
+
+/* Botões */
+button {
+  background: #0078d7;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.6s ease, color 0.6s ease;
+}
+
+button:hover {
+  background: #005a9e;
+  transform: scale(1.05);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+/* Tabela */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+table th {
+  background: #eee;
+}
+
+/* Barra de progresso */
+#progressContainer {
+  width: 100%;
+  background: #ddd;
+  margin-top: 15px;
+  height: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: background-color 0.6s ease;
+}
+
+#progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #0078d7, #00aaff);
+  background-size: 200% 100%;
+  color: #fff;
+  text-align: center;
+  line-height: 25px;
+  transition: width 0.5s ease-in-out, background-color 0.3s ease, color 0.6s ease;
+  animation: gradientMove 3s linear infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Total centralizado */
+#total {
+  text-align: center;
+  margin-top: 5px;
+  transition: color 0.6s ease;
+}
+
+/* Animação ao atualizar total */
+@keyframes pulseTotal {
+  0% { transform: scale(1); color: inherit; }
+  50% { transform: scale(1.1); color: #0078d7; }
+  100% { transform: scale(1); color: inherit; }
+}
+
+#total.atualizando {
+  animation: pulseTotal 0.6s ease;
+}
+
+.alerta {
+  color: red;
+  font-weight: bold;
+}
+
+/* ===== Efeitos visuais extras na tabela ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+table tr {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-20px); }
+}
+
+.removendo {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+table tbody tr:hover {
+  background-color: rgba(0, 120, 215, 0.1);
+  transition: background-color 0.3s ease;
+}
+/* ===== Tema Escuro ===== */
+body.theme-dark {
+  background: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.theme-dark h1 {
+  color: #f0f0f0;
+}
+
+body.theme-dark .form-box {
+  background: #2c2c2c;
+  border-color: #444;
+}
+
+body.theme-dark input, 
+body.theme-dark button {
+  background: #444;
+  color: #fff;
+  border: 1px solid #666;
+}
+
+body.theme-dark button {
+  background: #0078d7;
+}
+
+body.theme-dark button:hover {
+  background: #005a9e;
+}
+
+body.theme-dark table th {
+  background: #333;
+  color: #fff;
+}
+
+body.theme-dark table td {
+  background: #2c2c2c;
+  color: #f0f0f0;
+}
+
+body.theme-dark #progressContainer {
+  background: #555;
+}
+
+body.theme-dark #progressBar {
+  background: #00aaff;
+}
+
+/* ===== Tema Viagem ===== */
+body.theme-viagem {
+  background: #e0f7fa;
+  color: #004d40;
+}
+
+body.theme-viagem h1 {
+  color: #00695c;
+}
+
+body.theme-viagem .form-box {
+  background: #b2ebf2;
+  border-color: #4dd0e1;
+}
+
+body.theme-viagem input, 
+body.theme-viagem button {
+  background: #80deea;
+  color: #004d40;
+  border: 1px solid #26c6da;
+}
+
+body.theme-viagem #progressBar {
+  background: #009688;
+}
+
+/* ===== Tema Minimalista ===== */
+body.theme-minimalista {
+  background: #fafafa;
+  color: #212121;
+}
+
+body.theme-minimalista h1 {
+  color: #424242;
+}
+
+body.theme-minimalista .form-box {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+}
+
+body.theme-minimalista input, 
+body.theme-minimalista button {
+  background: #f5f5f5;
+  color: #212121;
+  border: 1px solid #bdbdbd;
+}
+
+body.theme-minimalista #progressBar {
+  background: #757575;
+}
+
+/* ===== Layout Responsivo ===== */
+@media (max-width: 768px) {
+  body {
+    margin: 10px;
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  input, button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #themeSelector {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  #themeSelector button {
+    flex: 1 1 45%;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  table th, table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  #progressContainer {
+    height: 20px;
+  }
+
+  #progressBar {
+    line-height: 20px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 18px;
+  }
+
+  #themeSelector button {
+    flex: 1 1 100%;
+  }
+
+  table th, table td {
+    font-size: 11px;
+  }
+}

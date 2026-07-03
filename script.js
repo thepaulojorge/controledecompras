@@ -43,16 +43,14 @@ document.addEventListener("DOMContentLoaded", () => {
 // VIAGENS
 // =============================================
 function inicializarViagens() {
-  if (viagens.length === 0) {
-    const id = criarViagemObj("Japão 2028", "Tóquio, Osaka");
-    viagens.push(id);
-    salvarViagens();
-    viagemAtualId = id.id;
-    localStorage.setItem("viagemAtualId", viagemAtualId);
-  }
-  if (!viagemAtualId || !viagens.find(v => v.id === viagemAtualId)) {
-    viagemAtualId = viagens[0].id;
-    localStorage.setItem("viagemAtualId", viagemAtualId);
+  if (viagens.length > 0) {
+    if (!viagemAtualId || !viagens.find(v => v.id === viagemAtualId)) {
+      viagemAtualId = viagens[0].id;
+      localStorage.setItem("viagemAtualId", viagemAtualId);
+    }
+  } else {
+    viagemAtualId = null;
+    localStorage.removeItem("viagemAtualId");
   }
   renderizarSidebar();
   atualizarHeaderViagem();
@@ -70,6 +68,17 @@ function viagemAtual() {
 function renderizarSidebar() {
   const lista = document.getElementById("listaViagens");
   lista.innerHTML = "";
+
+  if (viagens.length === 0) {
+    lista.innerHTML = `
+      <div style="text-align:center;padding:32px 16px;color:var(--text2);">
+        <div style="font-size:40px;margin-bottom:12px;">🧳</div>
+        <p style="font-size:14px;font-weight:500;margin-bottom:6px;">Nenhuma viagem por aqui ainda!</p>
+        <p style="font-size:12px;line-height:1.6;">Sua mala tá vazia e sua lista também.<br>Cria uma viagem e começa a planejar! ✈️</p>
+      </div>`;
+    return;
+  }
+
   viagens.forEach(v => {
     const item = document.createElement("div");
     item.className = "viagem-item" + (v.id === viagemAtualId ? " ativa" : "");
@@ -105,23 +114,28 @@ function trocarViagem(id) {
 
 function atualizarHeaderViagem() {
   const v = viagemAtual();
-  if (!v) return;
+  if (!v) {
+    document.getElementById("nomeViagem").textContent = "Controle de Compras";
+    document.getElementById("subViagem").textContent = "Minhas viagens";
+    return;
+  }
   document.getElementById("nomeViagem").textContent = v.nome;
-  document.getElementById("subViagem").textContent = v.destino || "Controle de Compras";
+  document.getElementById("subViagem").textContent = v.destino || "Sem destino";
 }
 
 function excluirViagem(id) {
-  if (viagens.length === 1) { mostrarToast("Você precisa ter pelo menos uma viagem.", "alerta"); return; }
   if (!confirm("Excluir esta viagem e todas as suas compras?")) return;
   viagens = viagens.filter(v => v.id !== id);
   salvarViagens();
   if (viagemAtualId === id) {
-    viagemAtualId = viagens[0].id;
-    localStorage.setItem("viagemAtualId", viagemAtualId);
+    viagemAtualId = viagens.length > 0 ? viagens[0].id : null;
+    if (viagemAtualId) localStorage.setItem("viagemAtualId", viagemAtualId);
+    else localStorage.removeItem("viagemAtualId");
   }
   renderizarSidebar();
   atualizarHeaderViagem();
   atualizarTabela();
+  renderizarWishlist();
 }
 
 function salvarViagens() {
@@ -331,9 +345,11 @@ function _removerCompra(id) {
 // =============================================
 function atualizarTabela(filtro = "") {
   const viagem = viagemAtual();
-  if (!viagem) return;
   const tbody = document.querySelector("#tabelaCompras tbody");
   tbody.innerHTML = "";
+  document.getElementById("emptyMsg").style.display = viagem ? "none" : "block";
+  document.getElementById("emptyMsg").textContent = viagem ? "" : "Crie uma viagem para começar! ✈️";
+  if (!viagem) { atualizarProgresso(); atualizarResumoCategorias(); return; }
 
   // Atualiza cabeçalho dinâmico de moedas
   const headerRow = document.getElementById("headerRow");
@@ -389,7 +405,14 @@ function atualizarTabela(filtro = "") {
 
 function atualizarProgresso() {
   const viagem = viagemAtual();
-  if (!viagem) return;
+  if (!viagem) {
+    document.getElementById("progressBar").style.width = "0%";
+    document.getElementById("totalLabel").textContent = "Total: $0.00";
+    document.getElementById("limiteLabel").textContent = `Limite: $${limiteUSD.toFixed(2)}`;
+    document.getElementById("percentLabel").textContent = "0%";
+    document.getElementById("total").textContent = `$0.00 / $${limiteUSD.toFixed(2)} — 0% do limite`;
+    return;
+  }
   const taxaUSD = taxas.USD || TAXAS_PADRAO.USD;
   const totalUSD = viagem.compras.reduce((acc, c) => acc + (c.conversoes?.USD ?? c.jpy * taxaUSD), 0);
   const percent  = Math.min((totalUSD / limiteUSD) * 100, 100);

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Compras - Japão 2028</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#c0392b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="theme-default">
+
+  <!-- ===== MENU LATERAL DE VIAGENS ===== -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Minhas Viagens</span>
+      <button id="btnFecharSidebar" class="btn-icon" title="Fechar">✕</button>
+    </div>
+    <div id="listaViagens" class="lista-viagens"></div>
+    <div class="sidebar-footer">
+      <button id="btnNovaViagem" class="btn-full">＋ Nova viagem</button>
+    </div>
+  </aside>
+
+  <!-- ===== PAINEL LATERAL DE DESEJOS ===== -->
+  <div id="wishlistOverlay" class="sidebar-overlay"></div>
+  <aside id="wishlistPanel" class="sidebar sidebar-right">
+    <div class="sidebar-header">
+      <span class="sidebar-title">⭐ Lista de Desejos</span>
+      <button id="btnFecharWishlist" class="btn-icon" title="Fechar">✕</button>
+    </div>
+    <div id="listaDesejos" class="lista-desejos"></div>
+    <div class="sidebar-footer">
+      <p class="wishlist-hint">Itens aqui não contam no limite da alfândega.</p>
+    </div>
+  </aside>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="header-inner">
+      <div class="header-left">
+        <button id="btnSidebar" class="btn-icon btn-menu" title="Minhas viagens">☰</button>
+        <div class="header-title">
+          <span class="header-icon">🇯🇵</span>
+          <div>
+            <h1 id="nomeViagem">Controle de Compras</h1>
+            <p class="header-sub" id="subViagem">Japão 2028</p>
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="btnWishlist" class="btn-icon btn-wish" title="Lista de desejos">⭐</button>
+        <div id="themeSelector">
+          <button data-theme="default" title="Tema Padrão">🌸</button>
+          <button data-theme="dark" title="Dark Mode">🌑</button>
+          <button data-theme="viagem" title="Tema Viagem">🌊</button>
+          <button data-theme="minimalista" title="Minimalista">⬜</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- CONFIG BAR -->
+    <section class="config-bar">
+      <div class="config-item">
+        <label for="limiteUSD">Limite (USD):</label>
+        <input type="number" id="limiteUSD" value="1000" min="1" step="10">
+      </div>
+      <div class="config-item">
+        <button id="btnMoedas" class="btn-outline">🌍 Moedas</button>
+      </div>
+      <div class="config-item taxa-info">
+        <span id="taxaInfo">Carregando taxas...</span>
+        <button id="btnAtualizarTaxa" title="Atualizar taxas">↻</button>
+      </div>
+    </section>
+
+    <!-- MODAL DE MOEDAS -->
+    <div id="modalMoedas" class="modal-overlay hidden">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span>🌍 Moedas exibidas</span>
+          <button id="btnFecharMoedas" class="btn-icon">✕</button>
+        </div>
+        <div id="checkboxMoedas" class="checkbox-moedas"></div>
+        <button id="btnSalvarMoedas" class="btn-full" style="margin-top:12px">Salvar</button>
+      </div>
+    </div>
+
+    <!-- ABAS -->
+    <div class="abas">
+      <button class="aba ativa" data-aba="compras">🛍 Compras</button>
+      <button class="aba" data-aba="calculadora">🧮 Calculadora</button>
+      <button class="aba" data-aba="historico">📅 Histórico</button>
+    </div>
+
+    <!-- ===== ABA: COMPRAS ===== -->
+    <div id="abaCompras" class="aba-content">
+
+      <!-- Formulário -->
+      <form id="formCompra" class="form-box">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item">Item:</label>
+            <input type="text" id="item" placeholder="Ex: Câmera Sony" autocomplete="off" required>
+          </div>
+          <div class="form-group">
+            <label for="categoria">Categoria:</label>
+            <select id="categoria">
+              <option value="Eletrônicos">🔌 Eletrônicos</option>
+              <option value="Roupas">👘 Roupas</option>
+              <option value="Alimentação">🍜 Alimentação</option>
+              <option value="Cosméticos">💄 Cosméticos</option>
+              <option value="Souvenirs">🎌 Souvenirs</option>
+              <option value="Outros">📦 Outros</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="valorJPY">Valor em JPY (¥):</label>
+            <input type="number" id="valorJPY" step="1" min="1" placeholder="Ex: 5000" required>
+          </div>
+          <div class="form-group foto-group">
+            <label for="fotoItem">Foto (opcional):</label>
+            <div class="foto-wrap">
+              <input type="file" id="fotoItem" accept="image/*" capture="environment">
+              <label for="fotoItem" class="btn-foto" id="labelFoto">📷 Adicionar</label>
+              <button type="button" id="btnRemoverFoto" class="btn-foto-remover hidden">✕</button>
+            </div>
+            <img id="previewFoto" class="foto-preview hidden" alt="Preview">
+          </div>
+          <div class="form-group button-group">
+            <label>&nbsp;</label>
+            <button type="submit" id="btnSubmit">＋ Adicionar</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="busca-wrap">
+          <span class="busca-icon">🔍</span>
+          <input type="text" id="busca" placeholder="Buscar item ou categoria...">
+        </div>
+        <div class="resumo-categorias" id="resumoCategorias"></div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="table-wrap">
+        <table id="tabelaCompras">
+          <thead>
+            <tr id="headerRow">
+              <th>Item</th>
+              <th>Cat.</th>
+              <th>Data</th>
+              <th>JPY (¥)</th>
+              <!-- colunas de moeda injetadas via JS -->
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p class="empty-msg" id="emptyMsg">Nenhuma compra registrada ainda.</p>
+      </div>
+
+      <!-- Progresso -->
+      <div class="progress-section">
+        <div class="progress-labels">
+          <span id="totalLabel">Total: $0.00</span>
+          <span id="limiteLabel">Limite: $1000.00</span>
+        </div>
+        <div id="progressContainer">
+          <div id="progressBar"></div>
+        </div>
+        <div id="total">$0.00 / $1000.00 — <span id="percentLabel">0%</span> do limite</div>
+      </div>
+
+      <!-- Ações -->
+      <div class="actions-bar">
+        <button id="btnExportCSV">⬇ CSV</button>
+        <button id="btnExportPDF">📄 PDF</button>
+        <button id="btnBackup">💾 Backup</button>
+        <button id="btnRestaurar">📂 Restaurar</button>
+        <input type="file" id="inputRestaurar" accept=".json" class="hidden">
+        <button id="btnLimpar" class="btn-danger">🗑 Limpar</button>
+      </div>
+
+    </div><!-- /abaCompras -->
+
+    <!-- ===== ABA: CALCULADORA ===== -->
+    <div id="abaCalculadora" class="aba-content hidden">
+      <div class="calc-box">
+        <h2 class="calc-titulo">Calculadora de conversão</h2>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label for="calcJPY">Valor em JPY (¥)</label>
+            <input type="number" id="calcJPY" placeholder="Ex: 3980" min="0" step="1">
+          </div>
+        </div>
+        <div id="calcResultados" class="calc-resultados"></div>
+        <p class="calc-hint">Os valores são calculados com as taxas atuais carregadas no app.</p>
+      </div>
+    </div>
+
+    <!-- ===== ABA: HISTÓRICO ===== -->
+    <div id="abaHistorico" class="aba-content hidden">
+      <div id="historicoConteudo" class="historico-wrap"></div>
+      <p class="empty-msg" id="emptyHistorico">Nenhuma compra registrada ainda.</p>
+    </div>
+
+  </main>
+
+  <!-- MODAL NOVA VIAGEM -->
+  <div id="modalViagem" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>✈️ Nova viagem</span>
+        <button id="btnFecharModalViagem" class="btn-icon">✕</button>
+      </div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label for="nomeViagemInput">Nome da viagem:</label>
+        <input type="text" id="nomeViagemInput" placeholder="Ex: Japão 2028" autocomplete="off">
+      </div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label for="destinoInput">Destino:</label>
+        <input type="text" id="destinoInput" placeholder="Ex: Tóquio, Osaka...">
+      </div>
+      <button id="btnCriarViagem" class="btn-full">Criar viagem</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./service-worker.js")
+        .then(() => console.log("SW registrado"))
+        .catch(e => console.error("SW erro:", e));
+    }
+  </script>
+  <script src="/script.js"></script>
+</body>
+</html>

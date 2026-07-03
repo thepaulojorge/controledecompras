@@ -1,0 +1,17 @@
+{
+  "name": "Controle de Compras Japão 2028",
+  "short_name": "ComprasJapão",
+  "description": "Controle seus gastos na alfândega durante a viagem ao Japão em 2028.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fdf6f0",
+  "theme_color": "#c0392b",
+  "orientation": "portrait",
+  "scope": "./",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "./icon/192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon/512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon/1024x1024.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }
+  ]
+}
